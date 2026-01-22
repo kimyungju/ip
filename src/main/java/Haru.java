@@ -13,7 +13,10 @@ public class Haru {
         System.out.println(logo);
         System.out.println("What can I do for you?");
 
-        Scanner sc = new Scanner(System.in);
+        String[] tasks = new String[100];
+        int taskCount = 0;
+
+        Scanner sc = new Scanner(System.in);    
         while (true) {
             String line = sc.nextLine();
 
@@ -22,7 +25,15 @@ public class Haru {
                 break;
             }
 
-            System.out.println(line); // Echo the input line
+            if (line.equals("list")) {
+                for (int i = 0; i < taskCount; i++) {
+                    System.out.println((i + 1) + ". " + tasks[i]);
+                }
+            } else {
+                tasks[taskCount] = line;
+                taskCount++;
+                System.out.println("added: " + line);
+            }
         }
         sc.close();
     }
