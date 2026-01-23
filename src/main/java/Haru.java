@@ -1,30 +1,6 @@
 import java.util.Scanner;
 
 public class Haru {
-
-    private static class Task {
-        private String description;
-        private boolean isDone;
-
-        public Task(String description) {
-            this.description = description;
-            this.isDone = false;
-        }
-
-        public void markAsDone() {
-            this.isDone = true;
-        }
-
-        public void markAsNotDone() {
-            this.isDone = false;
-        }   
-
-        @Override
-        public String toString() {
-            return (isDone ? "[X] " : "[ ] ") + description;
-        }
-    }
-
     public static void main(String[] args) {
         String logo =
                   " _   _                 \n"
@@ -39,11 +15,11 @@ public class Haru {
 
         Task[] tasks = new Task[100];
         int taskCount = 0;
-
         Scanner sc = new Scanner(System.in);    
+
         while (true) {
             String line = sc.nextLine();
-
+            
             if (line.equals("bye")) {
                 System.out.println("Bye. Hope to see you again soon!");
                 break;
@@ -52,32 +28,36 @@ public class Haru {
             if (line.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + ". " + tasks[i]);
+                    System.out.println((i + 1) + "." + tasks[i]);
                 }
-                continue;
-            } 
-            
-            if (line.startsWith("mark ")) {
+            } else if (line.startsWith("mark ")) {
                 int index = Integer.parseInt(line.substring(5)) - 1;
                 tasks[index].markAsDone();
-                System.out.println("Nice! I've marked this task as done:");
-                System.out.println("  " + tasks[index]);
-                continue;
-            }
-
-            if (line.startsWith("unmark ")) {
+                System.out.println("Nice! I've marked this task as done:\n  " + tasks[index]);
+            } else if (line.startsWith("unmark ")) {
                 int index = Integer.parseInt(line.substring(7)) - 1;
                 tasks[index].markAsNotDone();
-                System.out.println("OK, I've marked this task as not done yet:");
-                System.out.println("  " + tasks[index]);
-                continue;
-            }
-                
-            tasks[taskCount] = new Task(line);
-            taskCount++;
-            System.out.println("added: " + line);
-        }
+                System.out.println("OK, I've marked this task as not done yet:\n  " + tasks[index]);
+            } else {
+                Task newTask = null;
+                if (line.startsWith("todo ")) {
+                    newTask = new Todo(line.substring(5));
+                } else if (line.startsWith("deadline ")) {
+                    String[] parts = line.substring(9).split(" /by ");
+                    newTask = new Deadline(parts[0], parts[1]);
+                } else if (line.startsWith("event ")) {
+                    String[] parts = line.substring(6).split(" /from | /to ");
+                    newTask = new Event(parts[0], parts[1], parts[2]);
+                }
 
+                if (newTask != null) {
+                    tasks[taskCount] = newTask;
+                    taskCount++;
+                    System.out.println("Got it. I've added this task:\n  " + newTask);
+                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                }
+            }
+        }
         sc.close();
     }
 }
