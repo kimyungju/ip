@@ -1,7 +1,11 @@
 import java.util.ArrayList;
-import java.util.Scanner; 
+import java.util.Scanner;
 
 public class Haru {
+    enum Command {
+        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, UNKNOWN
+    }
+
     public static void main(String[] args) {
         String logo =
                   " _   _                 \n"
@@ -14,61 +18,85 @@ public class Haru {
         System.out.println(logo);
         System.out.println("What can I do for you?");
 
-        ArrayList<Task> tasks = new ArrayList<>(); 
+        ArrayList<Task> tasks = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
 
         while (true) {
             String line = sc.nextLine().trim();
+            if (line.isEmpty()) continue;
+
+            String commandWord = line.split(" ")[0].toUpperCase();
+            Command cmd;
+            try {
+                cmd = Command.valueOf(commandWord);
+            } catch (IllegalArgumentException e) {
+                cmd = Command.UNKNOWN;
+            }
 
             try {
-                if (line.equals("bye")) {
+                switch (cmd) {
+                case BYE:
                     printLine();
                     System.out.println("     Bye. Hope to see you again soon!");
                     printLine();
-                    break;
-                }
+                    sc.close();
+                    return;
 
-                if (line.equals("list")) {
+                case LIST:
                     printLine();
                     System.out.println("     Here are the tasks in your list:");
-                    for (int i = 0; i < tasks.size(); i++) { 
-                        System.out.println("     " + (i + 1) + "." + tasks.get(i)); 
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println("     " + (i + 1) + "." + tasks.get(i));
                     }
                     printLine();
-                } else if (line.startsWith("mark")) {
-                    int index = getIndex(line, 5, tasks.size());
-                    tasks.get(index).markAsDone();
+                    break;
+
+                case MARK:
+                    int mIdx = getIndex(line, 5, tasks.size());
+                    tasks.get(mIdx).markAsDone();
                     printLine();
-                    System.out.println("     Nice! I've marked this task as done:\n       " + tasks.get(index));
+                    System.out.println("     Nice! I've marked this task as done:\n       " + tasks.get(mIdx));
                     printLine();
-                } else if (line.startsWith("unmark")) {
-                    int index = getIndex(line, 7, tasks.size());
-                    tasks.get(index).markAsNotDone();
+                    break;
+
+                case UNMARK:
+                    int uIdx = getIndex(line, 7, tasks.size());
+                    tasks.get(uIdx).markAsNotDone();
                     printLine();
-                    System.out.println("     OK, I've marked this task as not done yet:\n       " + tasks.get(index));
+                    System.out.println("     OK, I've marked this task as not done yet:\n       " + tasks.get(uIdx));
                     printLine();
-                } else if (line.startsWith("delete")) {
-                    int index = getIndex(line, 7, tasks.size());
-                    Task removedTask = tasks.remove(index); 
+                    break;
+
+                case DELETE:
+                    int dIdx = getIndex(line, 7, tasks.size());
+                    Task removedTask = tasks.remove(dIdx);
                     printLine();
                     System.out.println("     Noted. I've removed this task:\n       " + removedTask);
                     System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
                     printLine();
-                } else if (line.startsWith("todo")) {
+                    break;
+
+                case TODO:
                     if (line.length() <= 5) throw new HaruException("The description of a todo cannot be empty.");
-                    tasks.add(new Todo(line.substring(5))); 
+                    tasks.add(new Todo(line.substring(5)));
                     printAddedMessage(tasks.get(tasks.size() - 1), tasks.size());
-                } else if (line.startsWith("deadline")) {
+                    break;
+
+                case DEADLINE:
                     if (!line.contains(" /by ")) throw new HaruException("A deadline needs a time! Use: /by");
-                    String[] parts = line.substring(9).split(" /by ");
-                    tasks.add(new Deadline(parts[0], parts[1]));
+                    String[] dParts = line.substring(9).split(" /by ");
+                    tasks.add(new Deadline(dParts[0], dParts[1]));
                     printAddedMessage(tasks.get(tasks.size() - 1), tasks.size());
-                } else if (line.startsWith("event")) {
+                    break;
+
+                case EVENT:
                     if (!line.contains(" /from ") || !line.contains(" /to ")) throw new HaruException("Events need /from and /to.");
-                    String[] parts = line.substring(6).split(" /from | /to ");
-                    tasks.add(new Event(parts[0], parts[1], parts[2]));
+                    String[] eParts = line.substring(6).split(" /from | /to ");
+                    tasks.add(new Event(eParts[0], eParts[1], eParts[2]));
                     printAddedMessage(tasks.get(tasks.size() - 1), tasks.size());
-                } else {
+                    break;
+
+                default: 
                     throw new HaruException("I'm sorry, but I don't know what that means :-(");
                 }
             } catch (HaruException e) {
@@ -81,7 +109,6 @@ public class Haru {
                 printLine();
             }
         }
-        sc.close();
     }
 
     private static int getIndex(String line, int offset, int size) throws HaruException {
