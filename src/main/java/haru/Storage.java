@@ -61,13 +61,22 @@ public class Storage {
             if (parts.length < 4) {
                 return null;
             }
-            task = new Deadline(description, parts[3]);
+            DateTimeInfo byInfo = parseDateTimeSafely(parts[3]);
+            if (byInfo == null) {
+                return null;
+            }
+            task = new Deadline(description, byInfo);
             break;
         case "E":
             if (parts.length < 5) {
                 return null;
             }
-            task = new Event(description, parts[3], parts[4]);
+            DateTimeInfo fromInfo = parseDateTimeSafely(parts[3]);
+            DateTimeInfo toInfo = parseDateTimeSafely(parts[4]);
+            if (fromInfo == null || toInfo == null) {
+                return null;
+            }
+            task = new Event(description, fromInfo, toInfo);
             break;
         default:
             return null;
@@ -85,12 +94,23 @@ public class Storage {
         String status = task.isDone ? "1" : "0";
         if (task instanceof Event) {
             Event event = (Event) task;
-            return "E | " + status + " | " + event.description + " | " + event.from + " | " + event.to;
+            return "E | " + status + " | " + event.description
+                    + " | " + event.getFromStorageString()
+                    + " | " + event.getToStorageString();
         }
         if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
-            return "D | " + status + " | " + deadline.description + " | " + deadline.by;
+            return "D | " + status + " | " + deadline.description
+                    + " | " + deadline.getByStorageString();
         }
         return "T | " + status + " | " + task.description;
+    }
+
+    private DateTimeInfo parseDateTimeSafely(String value) {
+        try {
+            return DateTimeUtil.parseStorage(value);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
