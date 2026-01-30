@@ -1,3 +1,5 @@
+package haru;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 

@@ -1,5 +1,7 @@
+package haru;
+
 public class Task {
-    protected  String description;
+    protected String description;
     protected boolean isDone;
 
     public Task(String description) {
