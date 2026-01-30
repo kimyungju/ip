@@ -100,7 +100,9 @@ public class Haru {
                 case DEADLINE:
                     if (!line.contains(" /by ")) throw new HaruException("A deadline needs a time! Use: /by");
                     String[] dParts = line.substring(9).split(" /by ");
-                    tasks.add(new Deadline(dParts[0], dParts[1]));
+                    if (dParts.length < 2) throw new HaruException("A deadline needs a time! Use: /by");
+                    DateTimeInfo byInfo = DateTimeUtil.parseUserInput(dParts[1]);
+                    tasks.add(new Deadline(dParts[0], byInfo));
                     saveTasks(storage, tasks);
                     printAddedMessage(tasks.get(tasks.size() - 1), tasks.size());
                     break;
@@ -108,7 +110,10 @@ public class Haru {
                 case EVENT:
                     if (!line.contains(" /from ") || !line.contains(" /to ")) throw new HaruException("Events need /from and /to.");
                     String[] eParts = line.substring(6).split(" /from | /to ");
-                    tasks.add(new Event(eParts[0], eParts[1], eParts[2]));
+                    if (eParts.length < 3) throw new HaruException("Events need /from and /to.");
+                    DateTimeInfo fromInfo = DateTimeUtil.parseUserInput(eParts[1]);
+                    DateTimeInfo toInfo = DateTimeUtil.parseUserInput(eParts[2]);
+                    tasks.add(new Event(eParts[0], fromInfo, toInfo));
                     saveTasks(storage, tasks);
                     printAddedMessage(tasks.get(tasks.size() - 1), tasks.size());
                     break;
