@@ -1,5 +1,6 @@
 package haru;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,7 +21,15 @@ public class Haru {
         System.out.println(logo);
         System.out.println("What can I do for you?");
 
+        Storage storage = new Storage("data/haru.txt");
         ArrayList<Task> tasks = new ArrayList<>();
+        try {
+            tasks = storage.load();
+        } catch (IOException e) {
+            printLine();
+            System.out.println("     OOPS!!! I couldn't load saved data.");
+            printLine();
+        }
         Scanner sc = new Scanner(System.in);
 
         while (true) {
@@ -56,6 +65,7 @@ public class Haru {
                 case MARK:
                     int mIdx = getIndex(line, 5, tasks.size());
                     tasks.get(mIdx).markAsDone();
+                    saveTasks(storage, tasks);
                     printLine();
                     System.out.println("     Nice! I've marked this task as done:\n       " + tasks.get(mIdx));
                     printLine();
@@ -64,6 +74,7 @@ public class Haru {
                 case UNMARK:
                     int uIdx = getIndex(line, 7, tasks.size());
                     tasks.get(uIdx).markAsNotDone();
+                    saveTasks(storage, tasks);
                     printLine();
                     System.out.println("     OK, I've marked this task as not done yet:\n       " + tasks.get(uIdx));
                     printLine();
@@ -72,6 +83,7 @@ public class Haru {
                 case DELETE:
                     int dIdx = getIndex(line, 7, tasks.size());
                     Task removedTask = tasks.remove(dIdx);
+                    saveTasks(storage, tasks);
                     printLine();
                     System.out.println("     Noted. I've removed this task:\n       " + removedTask);
                     System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
@@ -81,6 +93,7 @@ public class Haru {
                 case TODO:
                     if (line.length() <= 5) throw new HaruException("The description of a todo cannot be empty.");
                     tasks.add(new Todo(line.substring(5)));
+                    saveTasks(storage, tasks);
                     printAddedMessage(tasks.get(tasks.size() - 1), tasks.size());
                     break;
 
@@ -88,6 +101,7 @@ public class Haru {
                     if (!line.contains(" /by ")) throw new HaruException("A deadline needs a time! Use: /by");
                     String[] dParts = line.substring(9).split(" /by ");
                     tasks.add(new Deadline(dParts[0], dParts[1]));
+                    saveTasks(storage, tasks);
                     printAddedMessage(tasks.get(tasks.size() - 1), tasks.size());
                     break;
 
@@ -95,6 +109,7 @@ public class Haru {
                     if (!line.contains(" /from ") || !line.contains(" /to ")) throw new HaruException("Events need /from and /to.");
                     String[] eParts = line.substring(6).split(" /from | /to ");
                     tasks.add(new Event(eParts[0], eParts[1], eParts[2]));
+                    saveTasks(storage, tasks);
                     printAddedMessage(tasks.get(tasks.size() - 1), tasks.size());
                     break;
 
@@ -125,6 +140,14 @@ public class Haru {
         System.out.println("     Got it. I've added this task:\n       " + task);
         System.out.println("     Now you have " + count + " tasks in the list.");
         printLine();
+    }
+
+    private static void saveTasks(Storage storage, ArrayList<Task> tasks) throws HaruException {
+        try {
+            storage.save(tasks);
+        } catch (IOException e) {
+            throw new HaruException("I couldn't save tasks to disk.");
+        }
     }
 
     private static void printLine() {
