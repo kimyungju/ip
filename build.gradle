@@ -15,27 +15,18 @@ dependencies {
 
 test {
     useJUnitPlatform()
-
-    testLogging {
-        events "passed", "skipped", "failed"
-
-        showExceptions true
-        exceptionFormat "full"
-        showCauses true
-        showStackTraces true
-        showStandardStreams = false
-    }
 }
 
 application {
-    mainClass.set("seedu.duke.Duke")
+    mainClass.set("haru.Haru")
 }
 
 shadowJar {
-    archiveBaseName = "duke"
+    archiveBaseName = "haru"
     archiveClassifier = null
 }
 
-run{
+run {
     standardInput = System.in
+    enableAssertions = true
 }
