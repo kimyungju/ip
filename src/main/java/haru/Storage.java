@@ -33,13 +33,13 @@ public class Storage {
         return tasks;
     }
 
-    public void save(ArrayList<Task> tasks) throws IOException {
+    public void save(TaskList tasks) throws IOException {
         if (filePath.getParent() != null) {
             Files.createDirectories(filePath.getParent());
         }
         List<String> lines = new ArrayList<>();
-        for (Task task : tasks) {
-            lines.add(formatLine(task));
+        for (int i = 0; i < tasks.size(); i++) {
+            lines.add(formatLine(tasks.get(i)));
         }
         Files.write(filePath, lines);
     }
