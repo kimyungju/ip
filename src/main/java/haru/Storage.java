@@ -91,7 +91,7 @@ public class Storage {
     }
 
     private String formatLine(Task task) {
-        String status = task.isDone ? "1" : "0";
+        String status = task.isDone() ? "1" : "0";
         if (task instanceof Event) {
             Event event = (Event) task;
             return "E | " + status + " | " + event.description

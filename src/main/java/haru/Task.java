@@ -15,7 +15,11 @@ public class Task {
 
     public void markAsNotDone() {
         this.isDone = false;
-    }   
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
 
     @Override
     public String toString() {
