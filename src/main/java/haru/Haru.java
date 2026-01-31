@@ -2,11 +2,20 @@ package haru;
 
 import java.io.IOException;
 
+/**
+ * Main class for the Haru task management application.
+ * Coordinates between UI, storage, and task list components.
+ */
 public class Haru {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
 
+    /**
+     * Constructs a Haru application instance.
+     *
+     * @param filePath The file path for storing and loading tasks.
+     */
     public Haru(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
@@ -18,6 +27,10 @@ public class Haru {
         }
     }
 
+    /**
+     * Runs the main application loop.
+     * Displays welcome message, reads and processes user commands until exit.
+     */
     public void run() {
         ui.showWelcome();
 
@@ -91,6 +104,11 @@ public class Haru {
         }
     }
 
+    /**
+     * Main entry point of the application.
+     *
+     * @param args Command line arguments (not used).
+     */
     public static void main(String[] args) {
         new Haru("data/haru.txt").run();
     }

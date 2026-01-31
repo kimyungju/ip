@@ -2,33 +2,72 @@ package haru;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a list of tasks.
+ * Provides operations to add, remove, and access tasks.
+ */
 public class TaskList {
     private final ArrayList<Task> tasks;
 
+    /**
+     * Constructs an empty task list.
+     */
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
 
+    /**
+     * Constructs a task list from an existing ArrayList of tasks.
+     *
+     * @param tasks The ArrayList of tasks to initialize with.
+     */
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
 
+    /**
+     * Adds a task to the list.
+     *
+     * @param task The task to add.
+     */
     public void add(Task task) {
         tasks.add(task);
     }
 
+    /**
+     * Removes and returns the task at the specified index.
+     *
+     * @param index The zero-based index of the task to remove.
+     * @return The removed task.
+     */
     public Task remove(int index) {
         return tasks.remove(index);
     }
 
+    /**
+     * Returns the task at the specified index.
+     *
+     * @param index The zero-based index of the task.
+     * @return The task at the specified index.
+     */
     public Task get(int index) {
         return tasks.get(index);
     }
 
+    /**
+     * Returns the number of tasks in the list.
+     *
+     * @return The size of the task list.
+     */
     public int size() {
         return tasks.size();
     }
 
+    /**
+     * Returns the internal ArrayList of tasks.
+     *
+     * @return The ArrayList containing all tasks.
+     */
     public ArrayList<Task> getTasks() {
         return tasks;
     }
