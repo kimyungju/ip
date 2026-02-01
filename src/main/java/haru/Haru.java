@@ -91,6 +91,15 @@ public class Haru {
                     ui.showTaskAdded(event, tasks.size());
                     break;
 
+                case FIND:
+                    if (input.length() <= 5) {
+                        throw new HaruException("Please provide a keyword to search for.");
+                    }
+                    String keyword = input.substring(5).trim();
+                    TaskList matchingTasks = tasks.findTasks(keyword);
+                    ui.showMatchingTasks(matchingTasks.getTasks());
+                    break;
+
                 default:
                     throw new HaruException("I'm sorry, but I don't know what that means :-(");
                 }
