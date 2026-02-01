@@ -8,7 +8,7 @@ public class Parser {
      * Enum representing all possible commands.
      */
     public enum Command {
-        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, UNKNOWN
+        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, FIND, UNKNOWN
     }
 
     /**
