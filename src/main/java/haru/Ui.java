@@ -1,5 +1,6 @@
 package haru;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ui {
@@ -70,7 +71,7 @@ public class Ui {
         showLine();
     }
 
-    public void showTaskList(java.util.ArrayList<Task> tasks) {
+    public void showTaskList(ArrayList<Task> tasks) {
         showLine();
         System.out.println("     Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
@@ -79,7 +80,7 @@ public class Ui {
         showLine();
     }
 
-    public void showMatchingTasks(java.util.ArrayList<Task> tasks) {
+    public void showMatchingTasks(ArrayList<Task> tasks) {
         showLine();
         if (tasks.isEmpty()) {
             System.out.println("     No matching tasks found.");
