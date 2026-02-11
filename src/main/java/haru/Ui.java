@@ -27,48 +27,47 @@ public class Ui {
         System.out.println("    ____________________________________________________________");
     }
 
+    /**
+     * Shows one or more lines between divider lines.
+     *
+     * @param lines The lines to display (each prefixed with indent).
+     */
+    private void showBorderedMessage(String... lines) {
+        showLine();
+        for (String line : lines) {
+            System.out.println("     " + line);
+        }
+        showLine();
+    }
+
     public void showLoadingError() {
-        showLine();
-        System.out.println("     OOPS!!! I couldn't load saved data.");
-        showLine();
+        showBorderedMessage("OOPS!!! I couldn't load saved data.");
     }
 
     public void showError(String message) {
-        showLine();
-        System.out.println("     OOPS!!! " + message);
-        showLine();
+        showBorderedMessage("OOPS!!! " + message);
     }
 
     public void showGoodbye() {
-        showLine();
-        System.out.println("     Bye. Hope to see you again soon!");
-        showLine();
+        showBorderedMessage("Bye. Hope to see you again soon!");
     }
 
     public void showTaskAdded(Task task, int taskCount) {
-        showLine();
-        System.out.println("     Got it. I've added this task:\n       " + task);
-        System.out.println("     Now you have " + taskCount + " tasks in the list.");
-        showLine();
+        showBorderedMessage("Got it. I've added this task:\n       " + task,
+                "Now you have " + taskCount + " tasks in the list.");
     }
 
     public void showTaskMarked(Task task) {
-        showLine();
-        System.out.println("     Nice! I've marked this task as done:\n       " + task);
-        showLine();
+        showBorderedMessage("Nice! I've marked this task as done:\n       " + task);
     }
 
     public void showTaskUnmarked(Task task) {
-        showLine();
-        System.out.println("     OK, I've marked this task as not done yet:\n       " + task);
-        showLine();
+        showBorderedMessage("OK, I've marked this task as not done yet:\n       " + task);
     }
 
     public void showTaskDeleted(Task task, int taskCount) {
-        showLine();
-        System.out.println("     Noted. I've removed this task:\n       " + task);
-        System.out.println("     Now you have " + taskCount + " tasks in the list.");
-        showLine();
+        showBorderedMessage("Noted. I've removed this task:\n       " + task,
+                "Now you have " + taskCount + " tasks in the list.");
     }
 
     public void showTaskList(ArrayList<Task> tasks) {

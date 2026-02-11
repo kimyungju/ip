@@ -1,6 +1,7 @@
 package haru;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Represents a list of tasks.
@@ -32,6 +33,15 @@ public class TaskList {
      */
     public void add(Task task) {
         tasks.add(task);
+    }
+
+    /**
+     * Adds one or more tasks to the list.
+     *
+     * @param newTasks The tasks to add.
+     */
+    public void add(Task... newTasks) {
+        tasks.addAll(Arrays.asList(newTasks));
     }
 
     /**
