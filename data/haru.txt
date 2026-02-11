@@ -1,2 +1,4 @@
 T | 0 | read book
+T | 0 | Take a walk
+T | 0 | read book
 T | 0 | read book
