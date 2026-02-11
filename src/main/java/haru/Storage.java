@@ -90,20 +90,29 @@ public class Storage {
         return task;
     }
 
+    /**
+     * Joins storage line parts with " | " separator.
+     *
+     * @param parts The parts to join.
+     * @return The joined string.
+     */
+    private static String joinStorageParts(String... parts) {
+        return String.join(" | ", parts);
+    }
+
     private String formatLine(Task task) {
         String status = task.isDone() ? "1" : "0";
         if (task instanceof Event) {
             Event event = (Event) task;
-            return "E | " + status + " | " + event.description
-                    + " | " + event.getFromStorageString()
-                    + " | " + event.getToStorageString();
+            return joinStorageParts("E", status, event.description,
+                    event.getFromStorageString(), event.getToStorageString());
         }
         if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
-            return "D | " + status + " | " + deadline.description
-                    + " | " + deadline.getByStorageString();
+            return joinStorageParts("D", status, deadline.description,
+                    deadline.getByStorageString());
         }
-        return "T | " + status + " | " + task.description;
+        return joinStorageParts("T", status, task.description);
     }
 
     private DateTimeInfo parseDateTimeSafely(String value) {
