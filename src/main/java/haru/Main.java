@@ -41,17 +41,37 @@ public class Main extends Application {
         scrollPane.setContent(dialogContainer);
 
         userInput = new TextField();
+        userInput.setPromptText("Type your message here... (Press Enter to send)");
+        userInput.getStyleClass().add("input-field");
+
         sendButton = new Button("Send");
+        sendButton.getStyleClass().add("send-button");
 
         AnchorPane mainLayout = new AnchorPane();
         mainLayout.getChildren().addAll(scrollPane, userInput, sendButton);
 
         scene = new Scene(mainLayout);
 
-        stage.setScene(scene);
-        stage.show();
+        // Load CSS stylesheet
+        try {
+            scene.getStylesheets().add(
+                getClass().getResource("/styles.css").toExternalForm()
+            );
+        } catch (Exception e) {
+            System.out.println("Could not load stylesheet: " + e.getMessage());
+        }
 
-        stage.setTitle("Haru");
+        stage.setScene(scene);
+        stage.setTitle("Haru - Your Task Manager");
+
+        // Set window icon
+        try {
+            stage.getIcons().add(haruImage);
+        } catch (Exception e) {
+            // Ignore if icon not available
+        }
+
+        stage.show();
         stage.setResizable(false);
         stage.setMinHeight(600.0);
         stage.setMinWidth(400.0);
@@ -64,18 +84,17 @@ public class Main extends Application {
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setVvalue(1.0);
         scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background: white;");
+        scrollPane.getStyleClass().add("scroll-pane");
 
         dialogContainer.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        dialogContainer.setSpacing(10);
-        dialogContainer.setPadding(new Insets(10));
+        dialogContainer.setSpacing(12);
+        dialogContainer.setPadding(new Insets(15));
 
         // Input row: fixed height at bottom
         userInput.setPrefHeight(45.0);
         userInput.setPrefWidth(325.0);
         sendButton.setPrefHeight(45.0);
         sendButton.setPrefWidth(75.0);
-        sendButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;");
 
         // Anchors: scrollPane fills top, input row at bottom
         AnchorPane.setTopAnchor(scrollPane, 0.0);
@@ -123,7 +142,13 @@ public class Main extends Application {
     }
 
     private void handleUserInput() {
-        String userText = userInput.getText();
+        String userText = userInput.getText().trim();
+
+        // Don't process empty messages
+        if (userText.isEmpty()) {
+            return;
+        }
+
         String haruText = haru.getResponse(userText);
 
         dialogContainer.getChildren().addAll(
@@ -131,5 +156,17 @@ public class Main extends Application {
                 DialogBox.getHaruDialog(haruText, haruImage));
 
         userInput.clear();
+
+        // Close window gracefully if user said bye
+        if (userText.toLowerCase().equals("bye")) {
+            javafx.application.Platform.runLater(() -> {
+                try {
+                    Thread.sleep(1500);
+                    javafx.application.Platform.exit();
+                } catch (InterruptedException e) {
+                    javafx.application.Platform.exit();
+                }
+            });
+        }
     }
 }
