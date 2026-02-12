@@ -28,9 +28,16 @@ public class DialogBox extends HBox {
         displayPicture.setFitWidth(AVATAR_SIZE);
         displayPicture.setFitHeight(AVATAR_SIZE);
 
+        // Make avatar circular
+        javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(
+            AVATAR_SIZE / 2, AVATAR_SIZE / 2, AVATAR_SIZE / 2
+        );
+        displayPicture.setClip(clip);
+
         this.setAlignment(Pos.TOP_RIGHT);
         this.setSpacing(10);
-        this.setPadding(new Insets(8));
+        this.setPadding(new Insets(10));
+        this.getStyleClass().add("dialog-box");
         this.getChildren().addAll(text, displayPicture);
     }
 
@@ -38,14 +45,14 @@ public class DialogBox extends HBox {
      * Style as user message (right-aligned, light blue background).
      */
     public void setUserStyle() {
-        this.setStyle("-fx-background-color: #E3F2FD; -fx-background-radius: 10;");
+        this.getStyleClass().add("user-message");
     }
 
     /**
      * Style as Haru message (left-aligned, light gray background).
      */
     public void setHaruStyle() {
-        this.setStyle("-fx-background-color: #F5F5F5; -fx-background-radius: 10;");
+        this.getStyleClass().add("bot-message");
     }
 
     /**
