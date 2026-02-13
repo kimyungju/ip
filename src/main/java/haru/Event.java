@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
  * Represents an event task (a task with start and end date/time).
  */
 public class Event extends Task {
-    protected LocalDateTime from;
-    protected LocalDateTime to;
-    protected boolean hasTimeFrom;
-    protected boolean hasTimeTo;
+    private LocalDateTime from;
+    private LocalDateTime to;
+    private boolean hasTimeFrom;
+    private boolean hasTimeTo;
 
     /**
      * Constructs a new Event task.

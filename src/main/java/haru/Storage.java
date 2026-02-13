@@ -105,15 +105,15 @@ public class Storage {
         String status = task.isDone() ? "1" : "0";
         if (task instanceof Event) {
             Event event = (Event) task;
-            return joinStorageParts("E", status, event.description,
+            return joinStorageParts("E", status, event.getDescription(),
                     event.getFromStorageString(), event.getToStorageString());
         }
         if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
-            return joinStorageParts("D", status, deadline.description,
+            return joinStorageParts("D", status, deadline.getDescription(),
                     deadline.getByStorageString());
         }
-        return joinStorageParts("T", status, task.description);
+        return joinStorageParts("T", status, task.getDescription());
     }
 
     private DateTimeInfo parseDateTimeSafely(String value) {
