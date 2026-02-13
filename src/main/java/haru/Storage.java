@@ -34,6 +34,7 @@ public class Storage {
     }
 
     public void save(TaskList tasks) throws IOException {
+        assert tasks != null : "TaskList to save should not be null";
         if (filePath.getParent() != null) {
             Files.createDirectories(filePath.getParent());
         }

@@ -26,6 +26,7 @@ public class Parser {
      * @return The corresponding Command enum value, or UNKNOWN if not recognized.
      */
     public static Command parseCommand(String input) {
+        assert input != null : "Parser input should not be null";
         String commandWord = input.split(" ")[0].toUpperCase();
         try {
             return Command.valueOf(commandWord);
@@ -44,6 +45,7 @@ public class Parser {
      * @throws HaruException If the index is missing, invalid, or out of bounds.
      */
     public static int parseTaskIndex(String input, int prefixLength, int taskCount) throws HaruException {
+        assert prefixLength >= 0 : "Command prefix length should not be negative";
         if (input.length() <= prefixLength) {
             throw new HaruException("Please provide a task number.");
         }

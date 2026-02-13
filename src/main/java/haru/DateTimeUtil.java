@@ -13,6 +13,7 @@ public class DateTimeUtil {
     private static final DateTimeFormatter OUTPUT_DATETIME = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
 
     public static DateTimeInfo parseUserInput(String input) throws HaruException {
+        assert input != null : "Date/time input should not be null";
         String trimmed = input.trim();
         try {
             LocalDateTime dateTime = LocalDateTime.parse(trimmed, INPUT_DATETIME);
@@ -35,6 +36,7 @@ public class DateTimeUtil {
     }
 
     public static DateTimeInfo parseStorage(String input) throws DateTimeParseException {
+        assert input != null : "Storage date/time string should not be null";
         try {
             LocalDateTime dateTime = LocalDateTime.parse(input);
             return new DateTimeInfo(dateTime, true);
