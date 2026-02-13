@@ -33,6 +33,31 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Loads contacts from the storage file (lines starting with "C").
+     *
+     * @return An ArrayList of contacts parsed from the file.
+     * @throws IOException If reading the file fails.
+     */
+    public ArrayList<Contact> loadContacts() throws IOException {
+        ArrayList<Contact> contacts = new ArrayList<>();
+        if (!Files.exists(filePath)) {
+            return contacts;
+        }
+        List<String> lines = Files.readAllLines(filePath);
+        for (String line : lines) {
+            String trimmedLine = line.trim();
+            if (trimmedLine.isEmpty()) {
+                continue;
+            }
+            Contact contact = parseContactLine(trimmedLine);
+            if (contact != null) {
+                contacts.add(contact);
+            }
+        }
+        return contacts;
+    }
+
     public void save(TaskList tasks) throws IOException {
         assert tasks != null : "TaskList to save should not be null";
         if (filePath.getParent() != null) {
@@ -41,6 +66,29 @@ public class Storage {
         List<String> lines = new ArrayList<>();
         for (int i = 0; i < tasks.size(); i++) {
             lines.add(formatLine(tasks.get(i)));
+        }
+        Files.write(filePath, lines);
+    }
+
+    /**
+     * Saves both tasks and contacts to the storage file.
+     *
+     * @param tasks The task list to save.
+     * @param contacts The contact list to save.
+     * @throws IOException If writing to the file fails.
+     */
+    public void saveAll(TaskList tasks, ContactList contacts) throws IOException {
+        assert tasks != null : "TaskList to save should not be null";
+        assert contacts != null : "ContactList to save should not be null";
+        if (filePath.getParent() != null) {
+            Files.createDirectories(filePath.getParent());
+        }
+        List<String> lines = new ArrayList<>();
+        for (int i = 0; i < tasks.size(); i++) {
+            lines.add(formatLine(tasks.get(i)));
+        }
+        for (int i = 0; i < contacts.size(); i++) {
+            lines.add(formatContactLine(contacts.get(i)));
         }
         Files.write(filePath, lines);
     }
@@ -114,6 +162,18 @@ public class Storage {
                     deadline.getByStorageString());
         }
         return joinStorageParts("T", status, task.getDescription());
+    }
+
+    private Contact parseContactLine(String line) {
+        String[] parts = line.split("\\s*\\|\\s*");
+        if (parts.length < 4 || !"C".equals(parts[0])) {
+            return null;
+        }
+        return new Contact(parts[1], parts[2], parts[3]);
+    }
+
+    private String formatContactLine(Contact contact) {
+        return joinStorageParts("C", contact.getName(), contact.getPhone(), contact.getEmail());
     }
 
     private DateTimeInfo parseDateTimeSafely(String value) {

@@ -92,6 +92,38 @@ public class Ui {
         showLine();
     }
 
+    public void showContactAdded(Contact contact, int contactCount) {
+        showBorderedMessage("Got it. I've added this contact:\n       " + contact,
+                "Now you have " + contactCount + " contacts in the list.");
+    }
+
+    public void showContactDeleted(Contact contact, int contactCount) {
+        showBorderedMessage("Noted. I've removed this contact:\n       " + contact,
+                "Now you have " + contactCount + " contacts in the list.");
+    }
+
+    public void showContactList(ArrayList<Contact> contacts) {
+        showLine();
+        System.out.println("     Here are the contacts in your list:");
+        for (int i = 0; i < contacts.size(); i++) {
+            System.out.println("     " + (i + 1) + "." + contacts.get(i));
+        }
+        showLine();
+    }
+
+    public void showMatchingContacts(ArrayList<Contact> contacts) {
+        showLine();
+        if (contacts.isEmpty()) {
+            System.out.println("     No matching contacts found.");
+        } else {
+            System.out.println("     Here are the matching contacts in your list:");
+            for (int i = 0; i < contacts.size(); i++) {
+                System.out.println("     " + (i + 1) + "." + contacts.get(i));
+            }
+        }
+        showLine();
+    }
+
     public String readCommand() {
         String line = scanner.nextLine().trim();
         while (line.isEmpty()) {
