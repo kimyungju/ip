@@ -5,7 +5,7 @@ package haru;
  * This is the base class for all specific task types.
  */
 public class Task {
-    protected String description;
+    private String description;
     protected boolean isDone;
 
     /**
@@ -22,6 +22,10 @@ public class Task {
     /**
      * Marks this task as done.
      */
+    public String getDescription() {
+        return description;
+    }
+
     public void markAsDone() {
         this.isDone = true;
     }
