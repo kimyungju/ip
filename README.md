@@ -2,8 +2,6 @@
 
 > A friendly task management chatbot with a warm spring-themed GUI.
 
-![Haru Screenshot](docs/Ui.png)
-
 ## Features
 
 - **Task management** — Create and track todos, deadlines, and events
