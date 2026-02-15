@@ -8,7 +8,8 @@ public class Parser {
      * Enum representing all possible commands.
      */
     public enum Command {
-        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, FIND, UNKNOWN
+        BYE, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, FIND,
+        CONTACT, CONTACT_LIST, CONTACT_DELETE, CONTACT_FIND, UNKNOWN
     }
 
     static final int TODO_PREFIX_LENGTH = 5;
@@ -18,6 +19,9 @@ public class Parser {
     static final int DELETE_PREFIX_LENGTH = 7;
     static final int DEADLINE_PREFIX_LENGTH = 9;
     static final int FIND_PREFIX_LENGTH = 5;
+    static final int CONTACT_PREFIX_LENGTH = 8;
+    static final int CONTACT_DELETE_PREFIX_LENGTH = 15;
+    static final int CONTACT_FIND_PREFIX_LENGTH = 13;
 
     /**
      * Parses the command word from user input.
@@ -107,5 +111,39 @@ public class Parser {
         DateTimeInfo fromInfo = DateTimeUtil.parseUserInput(parts[1].trim());
         DateTimeInfo toInfo = DateTimeUtil.parseUserInput(parts[2].trim());
         return new Event(parts[0].trim(), fromInfo, toInfo);
+    }
+
+    /**
+     * Parses a CONTACT command and creates a Contact.
+     *
+     * @param input The user input string.
+     * @return A new Contact.
+     * @throws HaruException If the format is incorrect.
+     */
+    public static Contact parseContact(String input) throws HaruException {
+        if (!input.contains(" /phone ") || !input.contains(" /email ")) {
+            throw new HaruException("A contact needs /phone and /email. "
+                    + "Use: contact NAME /phone PHONE /email EMAIL");
+        }
+        String body = input.substring(CONTACT_PREFIX_LENGTH);
+        int phoneIdx = body.indexOf(" /phone ");
+        int emailIdx = body.indexOf(" /email ");
+        String name = body.substring(0, Math.min(phoneIdx, emailIdx)).trim();
+        if (name.isEmpty()) {
+            throw new HaruException("The name of a contact cannot be empty.");
+        }
+        String phone;
+        String email;
+        if (phoneIdx < emailIdx) {
+            phone = body.substring(phoneIdx + 8, emailIdx).trim();
+            email = body.substring(emailIdx + 8).trim();
+        } else {
+            email = body.substring(emailIdx + 8, phoneIdx).trim();
+            phone = body.substring(phoneIdx + 8).trim();
+        }
+        if (phone.isEmpty() || email.isEmpty()) {
+            throw new HaruException("Phone and email cannot be empty.");
+        }
+        return new Contact(name, phone, email);
     }
 }
