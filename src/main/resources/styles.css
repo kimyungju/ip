@@ -1,95 +1,189 @@
-/* Overall app styling */
+/* ── Warm Spring Theme ── */
+
 .root {
     -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    -fx-font-size: 14px;
-    -fx-background-color: #FAFAFA;
+    -fx-font-size: 13.5px;
+    -fx-background-color: #FFF8F0;
 }
 
-/* Dialog boxes */
-.dialog-box {
-    -fx-padding: 10;
+/* ── Header Bar ── */
+
+.header-bar {
+    -fx-background-color: linear-gradient(to right, #F8C8C8, #FADADD);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
 }
 
-/* User message styling */
-.user-message {
-    -fx-background-color: linear-gradient(to bottom, #E3F2FD, #BBDEFB);
-    -fx-background-radius: 15;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
+.header-title {
+    -fx-font-family: "Georgia", "Times New Roman", serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #5D3A3A;
 }
 
-.user-message .label {
-    -fx-text-fill: #1565C0;
-    -fx-font-size: 14px;
+.header-subtitle {
+    -fx-font-size: 11px;
+    -fx-text-fill: #8B6060;
 }
 
-/* Bot message styling */
-.bot-message {
-    -fx-background-color: linear-gradient(to bottom, #FFFFFF, #F5F5F5);
-    -fx-background-radius: 15;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
+/* ── Dialog Containers ── */
+
+.dialog-container {
+    -fx-padding: 4 12 4 12;
 }
 
-.bot-message .label {
-    -fx-text-fill: #212121;
-    -fx-font-size: 14px;
+/* ── Bubbles ── */
+
+.dialog-bubble {
+    -fx-padding: 10 14 6 14;
+    -fx-max-width: 280;
+}
+
+.dialog-text {
+    -fx-font-size: 13.5px;
+    -fx-text-fill: #3D3030;
+}
+
+.dialog-timestamp {
+    -fx-font-size: 10px;
+    -fx-text-fill: #B09090;
+    -fx-padding: 4 0 0 0;
+}
+
+/* User bubbles */
+.user-bubble {
+    -fx-background-color: linear-gradient(to bottom, #FFD6DC, #FFC4CC);
+    -fx-background-radius: 16 16 4 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+}
+
+.user-bubble .dialog-text {
+    -fx-text-fill: #5D3A3A;
+}
+
+.user-bubble .dialog-timestamp {
+    -fx-text-fill: #C09898;
+}
+
+/* Haru bubbles */
+.haru-bubble {
+    -fx-background-color: linear-gradient(to bottom, #FFFFFF, #FFF5EE);
+    -fx-background-radius: 16 16 16 4;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+}
+
+.haru-bubble .dialog-text {
+    -fx-text-fill: #3D3030;
+}
+
+.haru-bubble .dialog-timestamp {
+    -fx-text-fill: #B09090;
+}
+
+/* Error bubbles */
+.error-bubble {
+    -fx-background-color: linear-gradient(to bottom, #FFF0EE, #FFE8E4);
+    -fx-background-radius: 16 16 16 4;
+    -fx-border-color: #E8B8B0;
+    -fx-border-radius: 16 16 16 4;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);
+}
+
+.error-bubble .dialog-text {
+    -fx-text-fill: #8B3A3A;
+}
+
+.error-bubble .dialog-timestamp {
+    -fx-text-fill: #C09898;
+}
+
+/* ── Input Bar ── */
+
+.input-bar {
+    -fx-background-color: #FFF8F0;
+    -fx-border-color: #F0E0D8;
+    -fx-border-width: 1 0 0 0;
+}
+
+.input-field {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-border-color: #E8D4C8;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+    -fx-padding: 8 16 8 16;
+    -fx-font-size: 13.5px;
+    -fx-prompt-text-fill: #C0A8A0;
+}
+
+.input-field:focused {
+    -fx-border-color: #D4A0A0;
+    -fx-border-width: 1.5;
+    -fx-effect: dropshadow(gaussian, rgba(212,160,160,0.2), 4, 0, 0, 0);
 }
 
 /* Send button */
 .send-button {
-    -fx-background-color: linear-gradient(to bottom, #42A5F5, #2196F3);
+    -fx-background-color: linear-gradient(to bottom, #F8B0B0, #E89090);
     -fx-text-fill: white;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-background-radius: 8;
+    -fx-min-width: 38;
+    -fx-min-height: 38;
+    -fx-max-width: 38;
+    -fx-max-height: 38;
+    -fx-background-radius: 19;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.3), 4, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(232,144,144,0.3), 4, 0, 0, 2);
 }
 
 .send-button:hover {
-    -fx-background-color: linear-gradient(to bottom, #1E88E5, #1976D2);
-    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.5), 6, 0, 0, 3);
+    -fx-background-color: linear-gradient(to bottom, #F0A0A0, #D87878);
+    -fx-effect: dropshadow(gaussian, rgba(232,144,144,0.5), 6, 0, 0, 3);
 }
 
 .send-button:pressed {
-    -fx-background-color: #1565C0;
-    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.2), 2, 0, 0, 1);
+    -fx-background-color: #D07070;
+    -fx-effect: dropshadow(gaussian, rgba(232,144,144,0.2), 2, 0, 0, 1);
 }
 
-/* Input field */
-.input-field {
-    -fx-background-color: white;
-    -fx-background-radius: 8;
-    -fx-border-color: #E0E0E0;
-    -fx-border-radius: 8;
-    -fx-border-width: 1;
-    -fx-padding: 10;
-    -fx-font-size: 14px;
-}
+/* ── Scroll Pane ── */
 
-.input-field:focused {
-    -fx-border-color: #2196F3;
-    -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(33,150,243,0.2), 4, 0, 0, 0);
-}
-
-/* Scroll pane */
 .scroll-pane {
-    -fx-background-color: #FAFAFA;
-    -fx-background: #FAFAFA;
+    -fx-background-color: #FFF8F0;
+    -fx-background: #FFF8F0;
 }
 
 .scroll-pane .viewport {
-    -fx-background-color: #FAFAFA;
+    -fx-background-color: #FFF8F0;
 }
 
 .scroll-pane .scroll-bar:vertical {
     -fx-background-color: transparent;
+    -fx-pref-width: 8;
 }
 
 .scroll-pane .scroll-bar:vertical .thumb {
-    -fx-background-color: #BDBDBD;
-    -fx-background-radius: 5;
+    -fx-background-color: #D4B0A8;
+    -fx-background-radius: 4;
 }
 
 .scroll-pane .scroll-bar:vertical .thumb:hover {
-    -fx-background-color: #9E9E9E;
+    -fx-background-color: #C09890;
+}
+
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .increment-button,
+.scroll-pane .scroll-bar:vertical .decrement-button {
+    -fx-pref-height: 0;
+    -fx-padding: 0;
+}
+
+.scroll-pane .scroll-bar:vertical .increment-arrow,
+.scroll-pane .scroll-bar:vertical .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
 }

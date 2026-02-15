@@ -2,19 +2,27 @@ package haru;
 
 import java.io.InputStream;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.geometry.Insets;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * A GUI for Haru using JavaFX.
@@ -24,7 +32,6 @@ public class Main extends Application {
     private VBox dialogContainer;
     private TextField userInput;
     private Button sendButton;
-    private Scene scene;
 
     private Image userImage;
     private Image haruImage;
@@ -32,27 +39,65 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        // Load images (use placeholder if not found)
         userImage = loadImage("/images/DaUser.png");
         haruImage = loadImage("/images/Haru.png");
 
-        scrollPane = new ScrollPane();
+        // Header bar
+        ImageView headerAvatar = new ImageView(haruImage);
+        headerAvatar.setFitWidth(36);
+        headerAvatar.setFitHeight(36);
+        javafx.scene.shape.Circle headerClip = new javafx.scene.shape.Circle(18, 18, 18);
+        headerAvatar.setClip(headerClip);
+
+        Label titleLabel = new Label("Haru");
+        titleLabel.getStyleClass().add("header-title");
+
+        Label subtitleLabel = new Label("Task Manager");
+        subtitleLabel.getStyleClass().add("header-subtitle");
+
+        VBox titleBox = new VBox(titleLabel, subtitleLabel);
+        titleBox.setAlignment(Pos.CENTER_LEFT);
+
+        HBox headerBar = new HBox(12, headerAvatar, titleBox);
+        headerBar.getStyleClass().add("header-bar");
+        headerBar.setAlignment(Pos.CENTER_LEFT);
+        headerBar.setPadding(new Insets(10, 16, 10, 16));
+
+        // Chat area
         dialogContainer = new VBox();
-        scrollPane.setContent(dialogContainer);
+        dialogContainer.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        dialogContainer.setSpacing(12);
+        dialogContainer.setPadding(new Insets(15));
 
+        scrollPane = new ScrollPane(dialogContainer);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setVvalue(1.0);
+        scrollPane.setFitToWidth(true);
+        scrollPane.getStyleClass().add("scroll-pane");
+
+        // Input bar
         userInput = new TextField();
-        userInput.setPromptText("Type your message here... (Press Enter to send)");
+        userInput.setPromptText("Type a message...");
         userInput.getStyleClass().add("input-field");
+        HBox.setHgrow(userInput, Priority.ALWAYS);
 
-        sendButton = new Button("Send");
+        sendButton = new Button("\u27A4");
         sendButton.getStyleClass().add("send-button");
 
-        AnchorPane mainLayout = new AnchorPane();
-        mainLayout.getChildren().addAll(scrollPane, userInput, sendButton);
+        HBox inputBar = new HBox(10, userInput, sendButton);
+        inputBar.getStyleClass().add("input-bar");
+        inputBar.setAlignment(Pos.CENTER);
+        inputBar.setPadding(new Insets(10, 12, 10, 12));
 
-        scene = new Scene(mainLayout);
+        // Main layout
+        BorderPane mainLayout = new BorderPane();
+        mainLayout.setTop(headerBar);
+        mainLayout.setCenter(scrollPane);
+        mainLayout.setBottom(inputBar);
 
-        // Load CSS stylesheet
+        Scene scene = new Scene(mainLayout, 420, 650);
+
         try {
             scene.getStylesheets().add(
                 getClass().getResource("/styles.css").toExternalForm()
@@ -62,9 +107,11 @@ public class Main extends Application {
         }
 
         stage.setScene(scene);
-        stage.setTitle("Haru - Your Task Manager");
+        stage.setTitle("Haru");
+        stage.setResizable(true);
+        stage.setMinWidth(380);
+        stage.setMinHeight(500);
 
-        // Set window icon
         try {
             stage.getIcons().add(haruImage);
         } catch (Exception e) {
@@ -72,53 +119,19 @@ public class Main extends Application {
         }
 
         stage.show();
-        stage.setResizable(false);
-        stage.setMinHeight(600.0);
-        stage.setMinWidth(400.0);
 
-        mainLayout.setPrefSize(400.0, 600.0);
-
-        // Scroll area: top and sides, leave bottom for input row
-        scrollPane.setPrefSize(400.0, 535.0);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        scrollPane.setVvalue(1.0);
-        scrollPane.setFitToWidth(true);
-        scrollPane.getStyleClass().add("scroll-pane");
-
-        dialogContainer.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        dialogContainer.setSpacing(12);
-        dialogContainer.setPadding(new Insets(15));
-
-        // Input row: fixed height at bottom
-        userInput.setPrefHeight(45.0);
-        userInput.setPrefWidth(325.0);
-        sendButton.setPrefHeight(45.0);
-        sendButton.setPrefWidth(75.0);
-
-        // Anchors: scrollPane fills top, input row at bottom
-        AnchorPane.setTopAnchor(scrollPane, 0.0);
-        AnchorPane.setLeftAnchor(scrollPane, 0.0);
-        AnchorPane.setRightAnchor(scrollPane, 0.0);
-        AnchorPane.setBottomAnchor(scrollPane, 55.0);
-
-        AnchorPane.setBottomAnchor(sendButton, 5.0);
-        AnchorPane.setRightAnchor(sendButton, 5.0);
-
-        AnchorPane.setBottomAnchor(userInput, 5.0);
-        AnchorPane.setLeftAnchor(userInput, 5.0);
-        AnchorPane.setRightAnchor(userInput, 85.0);
-
-        // Show welcome message
+        // Welcome message
         dialogContainer.getChildren().add(
                 DialogBox.getHaruDialog(haru.getWelcomeMessage(), haruImage));
 
-        // Scroll down when new content added
+        // Auto-scroll on new content
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
 
-        // Handle user input
+        // Input handlers
         sendButton.setOnMouseClicked((event) -> handleUserInput());
         userInput.setOnAction((event) -> handleUserInput());
+
+        Platform.runLater(() -> userInput.requestFocus());
     }
 
     private Image loadImage(String path) {
@@ -130,11 +143,10 @@ public class Main extends Application {
         } catch (Exception e) {
             // Ignore
         }
-        // Placeholder: 50x50 light gray square (matches avatar size)
-        WritableImage placeholder = new WritableImage(50, 50);
+        WritableImage placeholder = new WritableImage(40, 40);
         PixelWriter pw = placeholder.getPixelWriter();
-        for (int x = 0; x < 50; x++) {
-            for (int y = 0; y < 50; y++) {
+        for (int x = 0; x < 40; x++) {
+            for (int y = 0; y < 40; y++) {
                 pw.setArgb(x, y, 0xFFE0E0E0);
             }
         }
@@ -143,30 +155,31 @@ public class Main extends Application {
 
     private void handleUserInput() {
         String userText = userInput.getText().trim();
-
-        // Don't process empty messages
         if (userText.isEmpty()) {
             return;
         }
 
         String haruText = haru.getResponse(userText);
 
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(userText, userImage),
-                DialogBox.getHaruDialog(haruText, haruImage));
+        dialogContainer.getChildren().add(
+                DialogBox.getUserDialog(userText, userImage));
+
+        if (haruText.startsWith("[ERROR] ")) {
+            dialogContainer.getChildren().add(
+                    DialogBox.getHaruErrorDialog(haruText.substring(8), haruImage));
+        } else {
+            dialogContainer.getChildren().add(
+                    DialogBox.getHaruDialog(haruText, haruImage));
+        }
 
         userInput.clear();
 
-        // Close window gracefully if user said bye
-        if (userText.toLowerCase().equals("bye")) {
-            javafx.application.Platform.runLater(() -> {
-                try {
-                    Thread.sleep(1500);
-                    javafx.application.Platform.exit();
-                } catch (InterruptedException e) {
-                    javafx.application.Platform.exit();
-                }
-            });
+        if (userText.equalsIgnoreCase("bye")) {
+            userInput.setDisable(true);
+            sendButton.setDisable(true);
+            PauseTransition delay = new PauseTransition(Duration.millis(1500));
+            delay.setOnFinished(e -> Platform.exit());
+            delay.play();
         }
     }
 }

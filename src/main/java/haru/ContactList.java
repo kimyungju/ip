@@ -1,6 +1,8 @@
 package haru;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents a list of contacts.
@@ -44,8 +46,13 @@ public class ContactList {
         return contacts.size();
     }
 
-    public ArrayList<Contact> getContacts() {
-        return contacts;
+    /**
+     * Returns an unmodifiable view of the contacts.
+     *
+     * @return An unmodifiable List of contacts.
+     */
+    public List<Contact> getContacts() {
+        return Collections.unmodifiableList(contacts);
     }
 
     /**

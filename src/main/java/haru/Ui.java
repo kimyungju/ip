@@ -1,6 +1,6 @@
 package haru;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Ui {
@@ -70,7 +70,7 @@ public class Ui {
                 "Now you have " + taskCount + " tasks in the list.");
     }
 
-    public void showTaskList(ArrayList<Task> tasks) {
+    public void showTaskList(List<Task> tasks) {
         showLine();
         System.out.println("     Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
@@ -79,7 +79,7 @@ public class Ui {
         showLine();
     }
 
-    public void showMatchingTasks(ArrayList<Task> tasks) {
+    public void showMatchingTasks(List<Task> tasks) {
         showLine();
         if (tasks.isEmpty()) {
             System.out.println("     No matching tasks found.");
@@ -102,7 +102,7 @@ public class Ui {
                 "Now you have " + contactCount + " contacts in the list.");
     }
 
-    public void showContactList(ArrayList<Contact> contacts) {
+    public void showContactList(List<Contact> contacts) {
         showLine();
         System.out.println("     Here are the contacts in your list:");
         for (int i = 0; i < contacts.size(); i++) {
@@ -111,7 +111,7 @@ public class Ui {
         showLine();
     }
 
-    public void showMatchingContacts(ArrayList<Contact> contacts) {
+    public void showMatchingContacts(List<Contact> contacts) {
         showLine();
         if (contacts.isEmpty()) {
             System.out.println("     No matching contacts found.");

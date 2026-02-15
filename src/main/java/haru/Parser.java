@@ -22,6 +22,8 @@ public class Parser {
     static final int CONTACT_PREFIX_LENGTH = 8;
     static final int CONTACT_DELETE_PREFIX_LENGTH = 15;
     static final int CONTACT_FIND_PREFIX_LENGTH = 13;
+    private static final String PHONE_DELIMITER = " /phone ";
+    private static final String EMAIL_DELIMITER = " /email ";
 
     /**
      * Parses the command word from user input.
@@ -71,7 +73,11 @@ public class Parser {
         if (input.length() <= TODO_PREFIX_LENGTH) {
             throw new HaruException("The description of a todo cannot be empty.");
         }
-        return new Todo(input.substring(TODO_PREFIX_LENGTH).trim());
+        String description = input.substring(TODO_PREFIX_LENGTH).trim();
+        if (description.isEmpty()) {
+            throw new HaruException("The description of a todo cannot be empty.");
+        }
+        return new Todo(description);
     }
 
     /**
@@ -89,8 +95,12 @@ public class Parser {
         if (parts.length < 2) {
             throw new HaruException("A deadline needs a time! Use: /by");
         }
+        String description = parts[0].trim();
+        if (description.isEmpty()) {
+            throw new HaruException("The description of a deadline cannot be empty.");
+        }
         DateTimeInfo byInfo = DateTimeUtil.parseUserInput(parts[1]);
-        return new Deadline(parts[0].trim(), byInfo);
+        return new Deadline(description, byInfo);
     }
 
     /**
@@ -108,9 +118,13 @@ public class Parser {
         if (parts.length < 3) {
             throw new HaruException("Events need /from and /to.");
         }
+        String description = parts[0].trim();
+        if (description.isEmpty()) {
+            throw new HaruException("The description of an event cannot be empty.");
+        }
         DateTimeInfo fromInfo = DateTimeUtil.parseUserInput(parts[1].trim());
         DateTimeInfo toInfo = DateTimeUtil.parseUserInput(parts[2].trim());
-        return new Event(parts[0].trim(), fromInfo, toInfo);
+        return new Event(description, fromInfo, toInfo);
     }
 
     /**
@@ -121,13 +135,13 @@ public class Parser {
      * @throws HaruException If the format is incorrect.
      */
     public static Contact parseContact(String input) throws HaruException {
-        if (!input.contains(" /phone ") || !input.contains(" /email ")) {
+        if (!input.contains(PHONE_DELIMITER) || !input.contains(EMAIL_DELIMITER)) {
             throw new HaruException("A contact needs /phone and /email. "
                     + "Use: contact NAME /phone PHONE /email EMAIL");
         }
         String body = input.substring(CONTACT_PREFIX_LENGTH);
-        int phoneIdx = body.indexOf(" /phone ");
-        int emailIdx = body.indexOf(" /email ");
+        int phoneIdx = body.indexOf(PHONE_DELIMITER);
+        int emailIdx = body.indexOf(EMAIL_DELIMITER);
         String name = body.substring(0, Math.min(phoneIdx, emailIdx)).trim();
         if (name.isEmpty()) {
             throw new HaruException("The name of a contact cannot be empty.");
@@ -135,11 +149,11 @@ public class Parser {
         String phone;
         String email;
         if (phoneIdx < emailIdx) {
-            phone = body.substring(phoneIdx + 8, emailIdx).trim();
-            email = body.substring(emailIdx + 8).trim();
+            phone = body.substring(phoneIdx + PHONE_DELIMITER.length(), emailIdx).trim();
+            email = body.substring(emailIdx + EMAIL_DELIMITER.length()).trim();
         } else {
-            email = body.substring(emailIdx + 8, phoneIdx).trim();
-            phone = body.substring(phoneIdx + 8).trim();
+            email = body.substring(emailIdx + EMAIL_DELIMITER.length(), phoneIdx).trim();
+            phone = body.substring(phoneIdx + PHONE_DELIMITER.length()).trim();
         }
         if (phone.isEmpty() || email.isEmpty()) {
             throw new HaruException("Phone and email cannot be empty.");
