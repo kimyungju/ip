@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
  * Represents an event task (a task with start and end date/time).
  */
 public class Event extends Task {
-    protected LocalDateTime from;
-    protected LocalDateTime to;
-    protected boolean hasTimeFrom;
-    protected boolean hasTimeTo;
+    private LocalDateTime from;
+    private LocalDateTime to;
+    private boolean hasTimeFrom;
+    private boolean hasTimeTo;
 
     /**
      * Constructs a new Event task.
@@ -20,6 +20,8 @@ public class Event extends Task {
      */
     public Event(String description, DateTimeInfo fromInfo, DateTimeInfo toInfo) {
         super(description);
+        assert fromInfo != null : "Event from DateTimeInfo should not be null";
+        assert toInfo != null : "Event to DateTimeInfo should not be null";
         this.from = fromInfo.getDateTime();
         this.to = toInfo.getDateTime();
         this.hasTimeFrom = fromInfo.hasTime();

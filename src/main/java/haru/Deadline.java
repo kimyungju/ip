@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
  * Represents a deadline task (a task with a deadline date/time).
  */
 public class Deadline extends Task {
-    protected LocalDateTime by;
-    protected boolean hasTime;
+    private LocalDateTime by;
+    private boolean hasTime;
 
     /**
      * Constructs a new Deadline task.
@@ -17,6 +17,7 @@ public class Deadline extends Task {
      */
     public Deadline(String description, DateTimeInfo byInfo) {
         super(description);
+        assert byInfo != null : "Deadline DateTimeInfo should not be null";
         this.by = byInfo.getDateTime();
         this.hasTime = byInfo.hasTime();
     }

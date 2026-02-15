@@ -50,21 +50,21 @@ public class Haru {
                     break;
 
                 case MARK:
-                    int mIdx = Parser.parseTaskIndex(input, 5, tasks.size());
+                    int mIdx = Parser.parseTaskIndex(input, Parser.MARK_PREFIX_LENGTH, tasks.size());
                     tasks.get(mIdx).markAsDone();
                     storage.save(tasks);
                     ui.showTaskMarked(tasks.get(mIdx));
                     break;
 
                 case UNMARK:
-                    int uIdx = Parser.parseTaskIndex(input, 7, tasks.size());
+                    int uIdx = Parser.parseTaskIndex(input, Parser.UNMARK_PREFIX_LENGTH, tasks.size());
                     tasks.get(uIdx).markAsNotDone();
                     storage.save(tasks);
                     ui.showTaskUnmarked(tasks.get(uIdx));
                     break;
 
                 case DELETE:
-                    int dIdx = Parser.parseTaskIndex(input, 7, tasks.size());
+                    int dIdx = Parser.parseTaskIndex(input, Parser.DELETE_PREFIX_LENGTH, tasks.size());
                     Task removedTask = tasks.remove(dIdx);
                     storage.save(tasks);
                     ui.showTaskDeleted(removedTask, tasks.size());
@@ -92,10 +92,10 @@ public class Haru {
                     break;
 
                 case FIND:
-                    if (input.length() <= 5) {
+                    if (input.length() <= Parser.FIND_PREFIX_LENGTH) {
                         throw new HaruException("Please provide a keyword to search for.");
                     }
-                    String keyword = input.substring(5).trim();
+                    String keyword = input.substring(Parser.FIND_PREFIX_LENGTH).trim();
                     TaskList matchingTasks = tasks.findTasks(keyword);
                     ui.showMatchingTasks(matchingTasks.getTasks());
                     break;
@@ -144,7 +144,7 @@ public class Haru {
                 return sb.toString();
 
             case MARK:
-                int mIdx = Parser.parseTaskIndex(input, 5, tasks.size());
+                int mIdx = Parser.parseTaskIndex(input, Parser.MARK_PREFIX_LENGTH, tasks.size());
                 tasks.get(mIdx).markAsDone();
                 storage.save(tasks);
                 sb.append(line).append("\n");
@@ -153,7 +153,7 @@ public class Haru {
                 return sb.toString();
 
             case UNMARK:
-                int uIdx = Parser.parseTaskIndex(input, 7, tasks.size());
+                int uIdx = Parser.parseTaskIndex(input, Parser.UNMARK_PREFIX_LENGTH, tasks.size());
                 tasks.get(uIdx).markAsNotDone();
                 storage.save(tasks);
                 sb.append(line).append("\n");
@@ -162,7 +162,7 @@ public class Haru {
                 return sb.toString();
 
             case DELETE:
-                int dIdx = Parser.parseTaskIndex(input, 7, tasks.size());
+                int dIdx = Parser.parseTaskIndex(input, Parser.DELETE_PREFIX_LENGTH, tasks.size());
                 Task removedTask = tasks.remove(dIdx);
                 storage.save(tasks);
                 sb.append(line).append("\n");
@@ -202,10 +202,10 @@ public class Haru {
                 return sb.toString();
 
             case FIND:
-                if (input.length() <= 5) {
+                if (input.length() <= Parser.FIND_PREFIX_LENGTH) {
                     throw new HaruException("Please provide a keyword to search for.");
                 }
-                String keyword = input.substring(5).trim();
+                String keyword = input.substring(Parser.FIND_PREFIX_LENGTH).trim();
                 TaskList matchingTasks = tasks.findTasks(keyword);
                 sb.append(line).append("\n");
                 if (matchingTasks.size() == 0) {
