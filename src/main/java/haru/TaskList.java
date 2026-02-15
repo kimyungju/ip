@@ -2,6 +2,8 @@ package haru;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents a list of tasks.
@@ -77,12 +79,12 @@ public class TaskList {
     }
 
     /**
-     * Returns the internal ArrayList of tasks.
+     * Returns an unmodifiable view of the tasks.
      *
-     * @return The ArrayList containing all tasks.
+     * @return An unmodifiable List of tasks.
      */
-    public ArrayList<Task> getTasks() {
-        return tasks;
+    public List<Task> getTasks() {
+        return Collections.unmodifiableList(tasks);
     }
 
     /**

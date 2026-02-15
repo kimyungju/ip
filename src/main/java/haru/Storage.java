@@ -98,39 +98,36 @@ public class Storage {
         if (parts.length < 3) {
             return null;
         }
-        String type = parts[0];
-        String status = parts[1];
-        String description = parts[2];
-        Task task;
+        Task task = parseTaskByType(parts[0], parts, parts[2]);
+        if (task == null) {
+            return null;
+        }
+        return applyStatus(task, parts[1]);
+    }
+
+    private Task parseTaskByType(String type, String[] parts, String description) {
         switch (type) {
         case "T":
-            task = new Todo(description);
-            break;
+            return new Todo(description);
         case "D":
             if (parts.length < 4) {
                 return null;
             }
             DateTimeInfo byInfo = parseDateTimeSafely(parts[3]);
-            if (byInfo == null) {
-                return null;
-            }
-            task = new Deadline(description, byInfo);
-            break;
+            return byInfo != null ? new Deadline(description, byInfo) : null;
         case "E":
             if (parts.length < 5) {
                 return null;
             }
             DateTimeInfo fromInfo = parseDateTimeSafely(parts[3]);
             DateTimeInfo toInfo = parseDateTimeSafely(parts[4]);
-            if (fromInfo == null || toInfo == null) {
-                return null;
-            }
-            task = new Event(description, fromInfo, toInfo);
-            break;
+            return (fromInfo != null && toInfo != null) ? new Event(description, fromInfo, toInfo) : null;
         default:
             return null;
         }
+    }
 
+    private Task applyStatus(Task task, String status) {
         if ("1".equals(status)) {
             task.markAsDone();
         } else if (!"0".equals(status)) {
@@ -179,7 +176,7 @@ public class Storage {
     private DateTimeInfo parseDateTimeSafely(String value) {
         try {
             return DateTimeUtil.parseStorage(value);
-        } catch (Exception e) {
+        } catch (java.time.format.DateTimeParseException e) {
             return null;
         }
     }

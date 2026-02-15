@@ -1,34 +1,41 @@
 package haru;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
- * Represents a dialog box consisting of an ImageView and a label.
+ * Represents a dialog box consisting of an avatar and a styled message bubble.
  */
 public class DialogBox extends HBox {
-    private Label text;
-    private ImageView displayPicture;
+    private static final double AVATAR_SIZE = 40.0;
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("h:mm a");
 
-    private static final double AVATAR_SIZE = 50.0;
-
-    private DialogBox(String s, Image img) {
-        text = new Label(s);
+    private DialogBox(String s, Image img, String styleClass) {
+        Label text = new Label(s);
         text.setWrapText(true);
         text.setMinHeight(Label.USE_PREF_SIZE);
+        text.getStyleClass().add("dialog-text");
 
-        displayPicture = new ImageView(img);
+        Label timestamp = new Label(LocalTime.now().format(TIME_FORMAT));
+        timestamp.getStyleClass().add("dialog-timestamp");
+
+        VBox bubble = new VBox(text, timestamp);
+        bubble.getStyleClass().addAll("dialog-bubble", styleClass + "-bubble");
+
+        ImageView displayPicture = new ImageView(img);
         displayPicture.setFitWidth(AVATAR_SIZE);
         displayPicture.setFitHeight(AVATAR_SIZE);
 
-        // Make avatar circular
         javafx.scene.shape.Circle clip = new javafx.scene.shape.Circle(
             AVATAR_SIZE / 2, AVATAR_SIZE / 2, AVATAR_SIZE / 2
         );
@@ -36,23 +43,8 @@ public class DialogBox extends HBox {
 
         this.setAlignment(Pos.TOP_RIGHT);
         this.setSpacing(10);
-        this.setPadding(new Insets(10));
-        this.getStyleClass().add("dialog-box");
-        this.getChildren().addAll(text, displayPicture);
-    }
-
-    /**
-     * Styles this dialog box as a user message (right-aligned, light blue background).
-     */
-    public void setUserStyle() {
-        this.getStyleClass().add("user-message");
-    }
-
-    /**
-     * Styles this dialog box as a Haru message (left-aligned, light gray background).
-     */
-    public void setHaruStyle() {
-        this.getStyleClass().add("bot-message");
+        this.getStyleClass().add("dialog-container");
+        this.getChildren().addAll(bubble, displayPicture);
     }
 
     /**
@@ -66,15 +58,18 @@ public class DialogBox extends HBox {
     }
 
     public static DialogBox getUserDialog(String s, Image img) {
-        DialogBox db = new DialogBox(s, img);
-        db.setUserStyle();
-        return db;
+        return new DialogBox(s, img, "user");
     }
 
     public static DialogBox getHaruDialog(String s, Image img) {
-        DialogBox db = new DialogBox(s, img);
+        DialogBox db = new DialogBox(s, img, "haru");
         db.flip();
-        db.setHaruStyle();
+        return db;
+    }
+
+    public static DialogBox getHaruErrorDialog(String s, Image img) {
+        DialogBox db = new DialogBox(s, img, "error");
+        db.flip();
         return db;
     }
 }
