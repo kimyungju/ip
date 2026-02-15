@@ -15,6 +15,9 @@ public class Task {
      * @param description The description of the task.
      */
     public Task(String description) {
+        if (description == null) {
+            throw new IllegalArgumentException("Task description must not be null");
+        }
         this.description = description;
         this.isDone = false;
     }

@@ -16,6 +16,9 @@ public class Contact {
      * @param email The contact's email address.
      */
     public Contact(String name, String phone, String email) {
+        if (name == null) { throw new IllegalArgumentException("Contact name must not be null"); }
+        if (phone == null) { throw new IllegalArgumentException("Contact phone must not be null"); }
+        if (email == null) { throw new IllegalArgumentException("Contact email must not be null"); }
         this.name = name;
         this.phone = phone;
         this.email = email;

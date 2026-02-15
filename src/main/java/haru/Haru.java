@@ -101,6 +101,9 @@ public class Haru {
     }
 
     private String handleList() {
+        if (tasks.size() == 0) {
+            return "Your task list is empty.";
+        }
         StringBuilder sb = new StringBuilder();
         sb.append("Here are the tasks in your list:\n");
         for (int i = 0; i < tasks.size(); i++) {
@@ -186,6 +189,9 @@ public class Haru {
     }
 
     private String handleContactList() {
+        if (contacts.size() == 0) {
+            return "Your contact list is empty.";
+        }
         StringBuilder sb = new StringBuilder();
         sb.append("Here are the contacts in your list:\n");
         for (int i = 0; i < contacts.size(); i++) {

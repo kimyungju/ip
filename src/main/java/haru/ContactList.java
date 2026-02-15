@@ -64,7 +64,7 @@ public class ContactList {
     public ContactList findContacts(String keyword) {
         ArrayList<Contact> matching = new ArrayList<>();
         for (Contact contact : contacts) {
-            if (contact.getName().toLowerCase().contains(keyword.toLowerCase())) {
+            if (contact.toString().toLowerCase().contains(keyword.toLowerCase())) {
                 matching.add(contact);
             }
         }

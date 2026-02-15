@@ -1,6 +1,7 @@
 package haru;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,7 +20,7 @@ public class Storage {
         if (!Files.exists(filePath)) {
             return tasks;
         }
-        List<String> lines = Files.readAllLines(filePath);
+        List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
         for (String line : lines) {
             String trimmedLine = line.trim();
             if (trimmedLine.isEmpty()) {
@@ -44,7 +45,7 @@ public class Storage {
         if (!Files.exists(filePath)) {
             return contacts;
         }
-        List<String> lines = Files.readAllLines(filePath);
+        List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
         for (String line : lines) {
             String trimmedLine = line.trim();
             if (trimmedLine.isEmpty()) {
@@ -58,17 +59,6 @@ public class Storage {
         return contacts;
     }
 
-    public void save(TaskList tasks) throws IOException {
-        assert tasks != null : "TaskList to save should not be null";
-        if (filePath.getParent() != null) {
-            Files.createDirectories(filePath.getParent());
-        }
-        List<String> lines = new ArrayList<>();
-        for (int i = 0; i < tasks.size(); i++) {
-            lines.add(formatLine(tasks.get(i)));
-        }
-        Files.write(filePath, lines);
-    }
 
     /**
      * Saves both tasks and contacts to the storage file.
@@ -90,11 +80,11 @@ public class Storage {
         for (int i = 0; i < contacts.size(); i++) {
             lines.add(formatContactLine(contacts.get(i)));
         }
-        Files.write(filePath, lines);
+        Files.write(filePath, lines, StandardCharsets.UTF_8);
     }
 
     private Task parseLine(String line) {
-        String[] parts = line.split("\\s*\\|\\s*");
+        String[] parts = line.split("\\s*\\|\\s*", 5);
         if (parts.length < 3) {
             return null;
         }
@@ -162,7 +152,7 @@ public class Storage {
     }
 
     private Contact parseContactLine(String line) {
-        String[] parts = line.split("\\s*\\|\\s*");
+        String[] parts = line.split("\\s*\\|\\s*", 4);
         if (parts.length < 4 || !"C".equals(parts[0])) {
             return null;
         }

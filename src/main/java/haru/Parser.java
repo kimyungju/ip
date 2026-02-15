@@ -114,16 +114,24 @@ public class Parser {
         if (!input.contains(" /from ") || !input.contains(" /to ")) {
             throw new HaruException("Events need /from and /to.");
         }
-        String[] parts = input.substring(EVENT_PREFIX_LENGTH).split(" /from | /to ");
-        if (parts.length < 3) {
-            throw new HaruException("Events need /from and /to.");
-        }
-        String description = parts[0].trim();
+        String body = input.substring(EVENT_PREFIX_LENGTH);
+        int fromIdx = body.indexOf(" /from ");
+        int toIdx = body.indexOf(" /to ");
+        String description = body.substring(0, Math.min(fromIdx, toIdx)).trim();
         if (description.isEmpty()) {
             throw new HaruException("The description of an event cannot be empty.");
         }
-        DateTimeInfo fromInfo = DateTimeUtil.parseUserInput(parts[1].trim());
-        DateTimeInfo toInfo = DateTimeUtil.parseUserInput(parts[2].trim());
+        String fromDate;
+        String toDate;
+        if (fromIdx < toIdx) {
+            fromDate = body.substring(fromIdx + 7, toIdx).trim();
+            toDate = body.substring(toIdx + 5).trim();
+        } else {
+            toDate = body.substring(toIdx + 5, fromIdx).trim();
+            fromDate = body.substring(fromIdx + 7).trim();
+        }
+        DateTimeInfo fromInfo = DateTimeUtil.parseUserInput(fromDate);
+        DateTimeInfo toInfo = DateTimeUtil.parseUserInput(toDate);
         return new Event(description, fromInfo, toInfo);
     }
 

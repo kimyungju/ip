@@ -20,16 +20,11 @@ public class DialogBox extends HBox {
     private static final double AVATAR_SIZE = 40.0;
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("h:mm a");
 
-    private DialogBox(String s, Image img, String styleClass) {
-        Label text = new Label(s);
-        text.setWrapText(true);
-        text.setMinHeight(Label.USE_PREF_SIZE);
-        text.getStyleClass().add("dialog-text");
-
+    private DialogBox(Node content, Image img, String styleClass) {
         Label timestamp = new Label(LocalTime.now().format(TIME_FORMAT));
         timestamp.getStyleClass().add("dialog-timestamp");
 
-        VBox bubble = new VBox(text, timestamp);
+        VBox bubble = new VBox(content, timestamp);
         bubble.getStyleClass().addAll("dialog-bubble", styleClass + "-bubble");
 
         ImageView displayPicture = new ImageView(img);
@@ -57,18 +52,26 @@ public class DialogBox extends HBox {
         this.getChildren().setAll(tmp);
     }
 
+    private static Node createTextNode(String s) {
+        Label label = new Label(s);
+        label.setWrapText(true);
+        label.setMinHeight(Label.USE_PREF_SIZE);
+        label.getStyleClass().add("dialog-text");
+        return label;
+    }
+
     public static DialogBox getUserDialog(String s, Image img) {
-        return new DialogBox(s, img, "user");
+        return new DialogBox(createTextNode(s), img, "user");
     }
 
     public static DialogBox getHaruDialog(String s, Image img) {
-        DialogBox db = new DialogBox(s, img, "haru");
+        DialogBox db = new DialogBox(ResponseFormatter.format(s), img, "haru");
         db.flip();
         return db;
     }
 
     public static DialogBox getHaruErrorDialog(String s, Image img) {
-        DialogBox db = new DialogBox(s, img, "error");
+        DialogBox db = new DialogBox(createTextNode(s), img, "error");
         db.flip();
         return db;
     }

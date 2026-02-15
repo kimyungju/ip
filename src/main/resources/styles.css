@@ -35,7 +35,7 @@
 
 .dialog-bubble {
     -fx-padding: 10 14 6 14;
-    -fx-max-width: 280;
+    -fx-max-width: 310;
 }
 
 .dialog-text {
@@ -151,7 +151,6 @@
 
 .scroll-pane {
     -fx-background-color: #FFF8F0;
-    -fx-background: #FFF8F0;
 }
 
 .scroll-pane .viewport {
@@ -186,4 +185,101 @@
 .scroll-pane .scroll-bar:vertical .decrement-arrow {
     -fx-shape: " ";
     -fx-padding: 0;
+}
+
+/* ── Response Text Styles ── */
+
+.response-header {
+    -fx-font-size: 13px;
+    -fx-text-fill: #5D3A3A;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 2 0;
+}
+
+.response-message {
+    -fx-font-size: 13px;
+    -fx-text-fill: #5D3A3A;
+}
+
+.response-count {
+    -fx-font-size: 11px;
+    -fx-text-fill: #B09090;
+    -fx-padding: 2 0 0 0;
+}
+
+/* ── Task & Contact Cards ── */
+
+.task-card {
+    -fx-background-color: #FFF3EC;
+    -fx-background-radius: 6;
+    -fx-border-width: 0 0 0 3;
+    -fx-border-radius: 6;
+    -fx-padding: 6 8 6 8;
+    -fx-border-color: transparent;
+}
+
+.task-card-todo { -fx-border-color: transparent transparent transparent #7AAF89; }
+.task-card-deadline { -fx-border-color: transparent transparent transparent #E09070; }
+.task-card-event { -fx-border-color: transparent transparent transparent #9B8EC4; }
+.task-card-contact { -fx-border-color: transparent transparent transparent #6EA8C8; }
+
+/* Type badges */
+.task-badge {
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 2 6 2 6;
+    -fx-background-radius: 3;
+}
+
+.badge-todo { -fx-background-color: #7AAF89; }
+.badge-deadline { -fx-background-color: #E09070; }
+.badge-event { -fx-background-color: #9B8EC4; }
+.badge-contact { -fx-background-color: #6EA8C8; }
+
+/* Task content */
+.task-number {
+    -fx-font-size: 11px;
+    -fx-text-fill: #B09090;
+    -fx-font-weight: bold;
+    -fx-min-width: 16;
+    -fx-alignment: center-right;
+}
+
+.task-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: #3D3030;
+}
+
+.task-done {
+    -fx-text-fill: #A89898;
+}
+
+.task-check {
+    -fx-text-fill: #7AAF89;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.task-date {
+    -fx-font-size: 11px;
+    -fx-text-fill: #B09090;
+    -fx-padding: 0 0 0 2;
+}
+
+/* Contact details */
+.contact-name {
+    -fx-font-size: 13px;
+    -fx-text-fill: #3D3030;
+    -fx-font-weight: bold;
+}
+
+.contact-detail {
+    -fx-font-size: 11px;
+    -fx-text-fill: #8B6060;
+}
+
+.contact-detail-sep {
+    -fx-font-size: 11px;
+    -fx-text-fill: #C0A8A0;
 }

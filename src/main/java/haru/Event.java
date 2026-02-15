@@ -20,8 +20,8 @@ public class Event extends Task {
      */
     public Event(String description, DateTimeInfo fromInfo, DateTimeInfo toInfo) {
         super(description);
-        assert fromInfo != null : "Event from DateTimeInfo should not be null";
-        assert toInfo != null : "Event to DateTimeInfo should not be null";
+        if (fromInfo == null) { throw new IllegalArgumentException("Event from DateTimeInfo should not be null"); }
+        if (toInfo == null) { throw new IllegalArgumentException("Event to DateTimeInfo should not be null"); }
         this.from = fromInfo.getDateTime();
         this.to = toInfo.getDateTime();
         this.hasTimeFrom = fromInfo.hasTime();
