@@ -2,6 +2,7 @@ package haru;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,7 +19,7 @@ import javafx.scene.layout.VBox;
  */
 public class DialogBox extends HBox {
     private static final double AVATAR_SIZE = 40.0;
-    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("h:mm a");
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("h:mm a", Locale.ENGLISH);
 
     private DialogBox(Node content, Image img, String styleClass) {
         Label timestamp = new Label(LocalTime.now().format(TIME_FORMAT));
