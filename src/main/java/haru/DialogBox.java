@@ -42,14 +42,14 @@ public class DialogBox extends HBox {
     }
 
     /**
-     * Style as user message (right-aligned, light blue background).
+     * Styles this dialog box as a user message (right-aligned, light blue background).
      */
     public void setUserStyle() {
         this.getStyleClass().add("user-message");
     }
 
     /**
-     * Style as Haru message (left-aligned, light gray background).
+     * Styles this dialog box as a Haru message (left-aligned, light gray background).
      */
     public void setHaruStyle() {
         this.getStyleClass().add("bot-message");
